@@ -1,0 +1,13 @@
+.disclosure_container {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    flex-direction: column;
+    margin-top: 7%;
+    margin-bottom: 10%;
+    padding: 0px 20%;
+
+    .link {
+        text-decoration: underline;
+    }
+}

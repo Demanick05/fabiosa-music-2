@@ -1,0 +1,31 @@
+.custom_loader {
+    width: 300px;
+    height: 300px;
+    display: grid;
+    border:8px solid #0000;
+    border-radius: 50%;
+    border-color:#E058C7 #0000;
+    animation: s6 2s infinite linear;
+    margin-top: 50px;
+  }
+  .custom_loader::before,
+  .custom_loader::after {    
+    content:"";
+    grid-area: 1/1;
+    margin:4px;
+    border:inherit;
+    border-radius: 50%;
+  }
+  .custom_loader::before {
+    border-color:#DD3676 #0000;
+    animation:inherit; 
+    animation-duration: 1s;
+    animation-direction: reverse;
+  }
+  .custom_loader::after {
+    margin:16px;
+  }
+  
+  @keyframes s6 { 
+    100%{transform: rotate(1turn)}
+  }
