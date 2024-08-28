@@ -6,7 +6,7 @@ services:
     build: .
     container_name: fabiosa-music-next
     ports:
-      - "80:3000"
+      - "81:3000"
     environment:
       - NODE_ENV=production
     # command: npm run start
