@@ -27,3 +27,15 @@
   .link {
     text-decoration: underline;
   }
+
+
+  @media only screen and (max-width: 768px) {
+    .banner {
+      height: 34vh;
+    }
+
+    .button {
+      margin-top: 12px;
+      height: 50px;
+    }
+  }

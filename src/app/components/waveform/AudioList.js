@@ -1,8 +1,11 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
 import fetchRecords from "@/app/api/music/route";
 import styles from "./audiolist.module.scss";
 import Loader from "../loader/Loader";
+import gridIcon from "../../../../public/grid.png";
+import listIcon from "../../../../public/list.png";
 
 const AudioList = () => {
   // Fetching records
@@ -122,7 +125,7 @@ const AudioList = () => {
     setSelectedCategories([]);
     setSelectedInstruments([]);
     setSelectedGenres([]);
-  }
+  };
 
   const filteredList = paginatedData.filter(matchesFilters);
   const isFilled = filteredList.length > 0;
@@ -131,7 +134,11 @@ const AudioList = () => {
     <div className={styles.audio_list}>
       <div className={styles.filters_wrapper}>
         <button className={styles.view_button} onClick={toggleView}>
-          {isGridView ? "List View" : "Grid View"}
+          {isGridView ? (
+            <Image className={styles.nav_icon} alt="grid" src={gridIcon} height={30} />
+          ) : (
+            <Image className={styles.nav_icon} alt="list" src={listIcon} height={30} />
+          )}
         </button>
         <div className={styles.tags_container}>
           <details className={styles.tag_accordion} open>
@@ -204,7 +211,10 @@ const AudioList = () => {
       <div className={isGridView ? styles.grid_view : styles.list_view}>
         {isFilled ? (
           filteredList.map((record, index) => (
-            <div key={record.audio_name} className={styles.audio_record_wrapper}>
+            <div
+              key={record.audio_name}
+              className={styles.audio_record_wrapper}
+            >
               <div className={styles.music_name_and_genre}>
                 <p className={styles.audio_name}>{record.base_music_name}</p>
                 <p className={styles.audio_genre}>
@@ -221,45 +231,29 @@ const AudioList = () => {
             </div>
           ))
         ) : (
-          <h1>No music matching your criteria on this page...<br/>Try other filters</h1>
+          <h1>
+            No music matching your criteria on this page...
+            <br />
+            Try other page
+          </h1>
         )}
-        {isFilled ? (
-          <div className={styles.pagination_box}>
-            {/* Pagination controls */}
-            <button
-              className={styles.pagination_btn}
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Back
-            </button>
-            <button
-              className={styles.pagination_btn}
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage * itemsPerPage >= records.length}
-            >
-              Next
-            </button>
-          </div>
-        ) : (
-          <div className={styles.pagination_box}>
-            {/* Pagination controls */}
-            <button
-              className={styles.pagination_btn_disabled}
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={true}
-            >
-              Back
-            </button>
-            <button
-              className={styles.pagination_btn_disabled}
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={true}
-            >
-              Next
-            </button>
-          </div>
-        )}
+        <div className={styles.pagination_box}>
+          {/* Pagination controls */}
+          <button
+            className={styles.pagination_btn}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Back
+          </button>
+          <button
+            className={styles.pagination_btn}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage * itemsPerPage >= records.length}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
