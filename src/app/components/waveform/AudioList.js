@@ -22,27 +22,56 @@ const AudioList = () => {
     load();
   }, []);
 
+  const [isVisible, setIsVisible] = useState(true);
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20; // Customize this value as needed
+
+  const tags = [...new Set(records.map((record) => record.tags))];
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const genres = [...new Set(records.map((record) => record.music_genre))];
+  const [selectedGenres, setSelectedGenres] = useState([]);
+
+  const instruments = [...new Set(records.map((record) => record.instruments))];
+  const [selectedInstruments, setSelectedInstruments] = useState([]);
+
+  const matchesFilters = (item) => {
+    const genreMatches =
+      selectedGenres.length === 0 || selectedGenres.includes(item.music_genre);
+    const tagsMatches =
+      selectedCategories.length === 0 ||
+      selectedCategories.every((tag) =>
+        item.tags.toLowerCase().includes(tag.toLowerCase())
+      );
+    const instrumentsMatches =
+      selectedInstruments.length === 0 ||
+      selectedInstruments.every((instr) =>
+        item.instruments.toLowerCase().includes(instr.toLowerCase())
+      );
+
+    return genreMatches && tagsMatches && instrumentsMatches;
+  };
+
+  const filteredList = records.filter(matchesFilters);
 
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return records.slice(startIndex, endIndex);
-  }, [records, currentPage]);
+    return filteredList.slice(startIndex, endIndex);
+  }, [filteredList, currentPage]);
 
-  const tags = [...new Set(paginatedData.map((record) => record.tags))];
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredList.length / itemsPerPage);
+  }, [filteredList, itemsPerPage]);
 
-  const genres = [
-    ...new Set(paginatedData.map((record) => record.music_genre)),
-  ];
-  const [selectedGenres, setSelectedGenres] = useState([]);
-
-  const instruments = [
-    ...new Set(paginatedData.map((record) => record.instruments)),
-  ];
-  const [selectedInstruments, setSelectedInstruments] = useState([]);
+  // Check if the current page is the last one
+  const isLastPage = useMemo(() => {
+    return currentPage === totalPages;
+  }, [currentPage, totalPages]);
 
   const [isGridView, setIsGridView] = useState(true);
   // Showing loader during fetching the audio list
@@ -98,49 +127,42 @@ const AudioList = () => {
     setIsGridView(!isGridView);
   };
 
-  const matchesFilters = (item) => {
-    const genreMatches =
-      selectedGenres.length === 0 || selectedGenres.includes(item.music_genre);
-    const tagsMatches =
-      selectedCategories.length === 0 ||
-      selectedCategories.every((tag) =>
-        item.tags.toLowerCase().includes(tag.toLowerCase())
-      );
-    const instrumentsMatches =
-      selectedInstruments.length === 0 ||
-      selectedInstruments.every((instr) =>
-        item.instruments.toLowerCase().includes(instr.toLowerCase())
-      );
-
-    return genreMatches && tagsMatches && instrumentsMatches;
-  };
-
   // Handle page change
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
-    filterDrop();
   };
 
-  const filterDrop = () => {
-    setSelectedCategories([]);
-    setSelectedInstruments([]);
-    setSelectedGenres([]);
-  };
-
-  const filteredList = paginatedData.filter(matchesFilters);
-  const isFilled = filteredList.length > 0;
+  const isFilled = paginatedData.length > 0;
 
   return (
     <div className={styles.audio_list}>
       <div className={styles.filters_wrapper}>
+        <button className={styles.fliters_button} onClick={toggleVisibility}>
+          Filters
+        </button>
+
         <button className={styles.view_button} onClick={toggleView}>
           {isGridView ? (
-            <Image className={styles.nav_icon} alt="grid" src={gridIcon} height={30} />
+            <Image
+              className={styles.nav_icon}
+              alt="grid"
+              src={gridIcon}
+              height={30}
+            />
           ) : (
-            <Image className={styles.nav_icon} alt="list" src={listIcon} height={30} />
+            <Image
+              className={styles.nav_icon}
+              alt="list"
+              src={listIcon}
+              height={30}
+            />
           )}
         </button>
-        <div className={styles.tags_container}>
+        <div
+          className={
+            isVisible ? styles.tags_container : styles.tags_container_visible
+          }
+        >
           <details className={styles.tag_accordion} open>
             <summary>
               <h3 className={styles.tagname}>GENRES</h3>
@@ -206,11 +228,17 @@ const AudioList = () => {
               ))}
             </div>
           </details>
+          {/* <button
+            className={styles.filter_apply_btn}
+            onClick={toggleVisibility}
+          >
+            Apply
+          </button> */}
         </div>
       </div>
       <div className={isGridView ? styles.grid_view : styles.list_view}>
         {isFilled ? (
-          filteredList.map((record, index) => (
+          paginatedData.map((record, index) => (
             <div
               key={record.audio_name}
               className={styles.audio_record_wrapper}
@@ -231,29 +259,30 @@ const AudioList = () => {
             </div>
           ))
         ) : (
-          <h1>
-            No music matching your criteria on this page...
-            <br />
-            Try other page
-          </h1>
+          <h1>No music matching selected filters...</h1>
         )}
-        <div className={styles.pagination_box}>
-          {/* Pagination controls */}
-          <button
-            className={styles.pagination_btn}
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            Back
-          </button>
-          <button
-            className={styles.pagination_btn}
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage * itemsPerPage >= records.length}
-          >
-            Next
-          </button>
-        </div>
+        {isFilled ? (
+          <div className={styles.pagination_box}>
+            {/* Pagination controls */}
+            <button
+              className={styles.pagination_btn}
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Back
+            </button>
+            <button
+              className={styles.pagination_btn}
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage * itemsPerPage >= filteredList.length}
+            >
+              Next
+            </button>
+          </div>
+        ) : (
+          <div>
+          </div>
+        )}
       </div>
     </div>
   );

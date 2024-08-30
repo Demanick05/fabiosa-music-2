@@ -1,20 +1,9 @@
 "use client";
 import React from "react";
-import { useState } from "react";
 import styles from "./banner.module.scss";
 import Link from "next/link";
 
 const Banner = () => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleClose = () => {
-    setIsVisible(false);
-  };
-
-  if (!isVisible) {
-    return null; // Don't render the banner if it's not visible
-  }
-
   return (
     <div className={styles.banner}>
       <p>
@@ -26,11 +15,13 @@ const Banner = () => {
       <h3>Privacy Notice</h3>
       <p>
         We value your privacy. Our website does not use cookies, track visitors,
-        or collect personal information. For more details, please review our <Link className={styles.link} href={'/privacy'}>Privacy Policy</Link>.
+        or collect personal information. For more details, please review our{" "}
+        Privacy Policy.
       </p>
-      <button onClick={handleClose} className={styles.button}>
-        ACCEPT
-      </button>
+      <div className={styles.link_container}>
+        <Link href={"/terms"}>Terms of Use</Link>
+        <Link href={"/privacy"}>Privacy Policy</Link>
+      </div>
     </div>
   );
 };

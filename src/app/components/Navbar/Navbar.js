@@ -15,15 +15,6 @@ const Navbar = () => {
             </Link>
           </div>
         </div>
-
-        <div className={styles.nav_links_wrapper}>
-          <Link className={styles.nav_link} href="/terms">
-            Terms of Use
-          </Link>
-          <Link className={styles.nav_link} href="/privacy">
-            Privacy Policy
-          </Link>
-        </div>
       </div>
     </nav>
   );
