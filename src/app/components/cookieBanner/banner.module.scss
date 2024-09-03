@@ -1,5 +1,5 @@
 .banner {
-  height: 15vh;
+  height: 12vh;
   margin-top: 50px;
   width: 100%;
   background-color: #0e0e1c;
@@ -8,7 +8,9 @@
   text-align: center;
   z-index: 1000;
   box-shadow: 1px 0px 28px -11px rgb(36, 184, 235);
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  font-size: 11px;
 }
 
 .button {
@@ -38,6 +40,7 @@
 @media only screen and (max-width: 768px) {
   .banner {
     height: fit-content;
+    font-size: 10px;
   }
 
   .button {
