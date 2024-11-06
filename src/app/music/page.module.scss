@@ -1,0 +1,354 @@
+.main_wrapper {
+  height: 100vh;
+  padding: 10% 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.audio {
+  width: 100%;
+
+  &::-webkit-media-controls-panel {
+    background: linear-gradient(
+      90deg,
+      rgba(2, 77, 152, 1) 50%,
+      rgba(36, 184, 235, 1) 100%
+    );
+  }
+
+  &::-webkit-media-controls-play-button {
+    background-color: #24b8eb;
+    border-radius: 50%;
+  }
+
+  &::-webkit-media-controls-mute-button {
+    background-color: #24b8eb;
+    border-radius: 50%;
+  }
+
+  &::-webkit-media-controls-current-time-display,
+  &::-webkit-media-controls-time-remaining-display {
+    color: white;
+  }
+
+  input {
+    background-color: white;
+  }
+}
+
+.search_bar {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 36px;
+  right: 240px;
+  z-index: 999;
+
+  .search_btn {
+    background-color: #dd3676;
+    border: none;
+    width: 95px;
+    height: 35px;
+    border-radius: 20px;
+    margin-left: 10px;
+    margin-right: 30px;
+
+    &:hover {
+      cursor: pointer;
+      box-shadow: 1px 0px 12px 0px #dd3676;
+      transition: all 0.3s ease;
+    }
+  }
+
+  .view_button {
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    background: transparent;
+    border: 0px solid rgb(221, 54, 118);
+    border-radius: 7px;
+    font-size: 24px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .nav_icon {
+    filter: drop-shadow(0 0 19px #dd3676);
+
+    &:hover {
+      filter: drop-shadow(0 0 5px #dd3676);
+    }
+  }
+
+  input {
+    width: 780px;
+    height: 45px;
+    padding-left: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+
+    &::placeholder {
+      font-size: 20px;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.grid_view {
+  display: flex;
+  height: fit-content;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-around;
+  width: 100%;
+  padding-bottom: 16%;
+
+  .audio_record_wrapper {
+    width: calc(50% - 10px);
+    padding: 10px;
+    height: fit-content;
+  }
+}
+
+.list_view {
+  width: 100%;
+  padding-bottom: 16%;
+
+  .audio_record_wrapper {
+    margin-bottom: 20px;
+    padding: 10px;
+  }
+}
+
+.track_list {
+  height: 100%;
+  width: 100%;
+}
+
+.audio_record_wrapper {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  background: #11254159;
+  padding: 5px 12px 0px 12px;
+  border-radius: 20px;
+  border: 1px solid #24b8eb96;
+  box-shadow: 1px 0px 28px -11px rgb(36, 184, 235);
+  list-style: none;
+}
+
+.track_name {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.audio_genre_label {
+  color: #24b8eb;
+}
+
+.tags {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 10px;
+  font-size: 14px;
+}
+
+.tags_box {
+  font-size: 14px;
+}
+
+.track_list_wrapper {
+  padding-bottom: 20%;
+}
+
+.pagination_box {
+  width: 100%;
+  padding: 0px 37%;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+
+  .pagination_btn {
+    width: 100px;
+    color: #dd3676;
+    height: 30px;
+    background: transparent;
+    border: 1px solid rgb(221, 54, 118);
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 1px 0px 12px 0px #dd3676;
+
+    &:hover {
+      background: #dd3676;
+      color: white;
+    }
+
+    &:disabled {
+      background: transparent;
+      cursor: default;
+      border: none;
+      box-shadow: none;
+      display: none;
+    }
+  }
+
+  .pagination_btn_disabled {
+    width: 150px;
+    color: rgba(255, 255, 255, 0.457);
+    height: 50px;
+    background: #464646;
+    border-radius: 7px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .grid_view {
+    width: 100%;
+    padding-bottom: 50%;
+
+    .audio_record_wrapper {
+      width: 100%;
+    }
+  }
+
+  .view_button {
+    display: none;
+  }
+
+  .search_btn {
+    height: 30px;
+  }
+
+  .audio_list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 75px;
+
+    .audio_record_wrapper {
+      width: 100%;
+    }
+
+    .filters_wrapper {
+      display: block;
+    }
+  }
+
+  .tags_container {
+    display: none;
+  }
+
+  .tags_container_visible {
+    width: 95%;
+    height: 40vh;
+    position: fixed;
+    top: 25px;
+    z-index: 900;
+    background: #0e0e1c;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dd3676;
+    box-shadow: 3px 3px 37px -6px rgb(221, 54, 118);
+    margin-top: 36px;
+    border-radius: 10px;
+    overflow-y: auto;
+
+    .category_checkbox {
+      width: 25px;
+      height: 40px;
+    }
+
+    .category_label {
+      font-size: 4vw;
+    }
+  }
+
+  .pagination_box {
+    padding: 0px 20%;
+  }
+
+  .pagination_btn {
+    height: 40px;
+  }
+
+  .fliters_button {
+    display: block;
+    position: fixed;
+    top: 22px;
+    right: 10%;
+    z-index: 900;
+    font-size: 20px;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    color: #dd3676;
+    text-shadow: 0px 0px 9px #dd3676;
+  }
+
+  .filter_apply_btn {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    right: 10%;
+    height: 41px;
+    width: 75px;
+    margin-bottom: 10%;
+    background: #dd3676;
+    box-shadow: 3px 3px 37px -6px rgb(221, 54, 118);
+    border: 1px solid #dd3676;
+    border-radius: 10px;
+  }
+
+  .search_bar {
+    top: 8px;
+    left: 144px;
+
+    .search_btn {
+      height: 26px;
+    }
+
+    input {
+      width: 160px;
+
+      &::placeholder {
+        font-size: 14px;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .main_wrapper {
+    height: 100vh;
+    padding: 19% 2% 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}

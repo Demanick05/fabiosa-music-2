@@ -5,7 +5,8 @@
   gap: 10px;
   justify-content: space-around;
   width: 80%;
-  padding-bottom: 6%;
+  padding-bottom: 15%;
+  padding-top: 7%;
 
   .audio_record_wrapper {
     width: calc(50% - 10px);
@@ -16,6 +17,7 @@
 
 .list_view {
   width: 80%;
+  padding: 7% 0 15%;
 
   .audio_record_wrapper {
     margin-bottom: 20px;
@@ -64,6 +66,10 @@
       filter: drop-shadow(0 0 5px #dd3676);
     }
   }
+}
+
+.loader_box {
+  padding: 10%;
 }
 
 .pagination_box {
@@ -296,7 +302,7 @@
     }
 
     .category_label {
-      font-size: 4vw;;
+      font-size: 4vw;
     }
   }
 

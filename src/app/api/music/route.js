@@ -26,7 +26,6 @@ async function fetchRecords() {
 
   await new Promise((resolve, reject) => {
     base('Music').select({
-      // Selecting the first 3 records in Grid view:
       maxRecords: 1500,
       view: "Grid view"
     }).eachPage(function page(records, fetchNextPage) {

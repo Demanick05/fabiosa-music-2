@@ -1,0 +1,54 @@
+.main_wrapper {
+  display: flex;
+  align-items: center;
+  padding-top: 12%;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.text_input {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    display: flex;
+    flex-direction: column;
+  }
+
+  input {
+    width: 80vw;
+    height: 90px;
+    margin: 20px 0px;
+  }
+}
+
+.toggles_box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 80vw;
+
+  input {
+    margin-right: 10px;
+  }
+}
+
+.dropzone {
+    border: #dd3676;
+    border-radius: 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 2px 0px 34px 0px #dd3676;
+    padding: 20px;
+    margin-top: 30px;
+    width: 75vw;
+    height: 200px;
+    text-align: center;
+}
+
+.selected_file_name {
+    margin-top: 10px;
+}
