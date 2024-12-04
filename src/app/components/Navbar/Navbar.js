@@ -8,11 +8,19 @@ const Navbar = () => {
   return (
     <nav className={styles.nav}>
       <div className={styles.nav_wrapper}>
-        <div>
+        <div className={styles.nav_inner_wrapper}>
           <div className={styles.logo}>
             <Link href={"/"}>
               <Image alt="fabiosa-logo" src={logo} height={30} />
             </Link>
+            <div className={styles.navigation_links}>
+              <Link className={styles.navigation_link} href={"/"}>
+                AI search
+              </Link>
+              <Link className={styles.navigation_link} href={"/search"}>
+                Regular search
+              </Link>
+            </div>
           </div>
         </div>
       </div>

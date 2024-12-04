@@ -46,12 +46,12 @@ const AudioList = () => {
     const tagsMatches =
       selectedCategories.length === 0 ||
       selectedCategories.every((tag) =>
-        item.tags.toLowerCase().includes(tag.toLowerCase())
+        typeof item.tags === 'string' && item.tags.toLowerCase().includes(tag.toLowerCase())
       );
     const instrumentsMatches =
       selectedInstruments.length === 0 ||
       selectedInstruments.every((instr) =>
-        item.instruments.toLowerCase().includes(instr.toLowerCase())
+        typeof item.instruments === 'string' && item.instruments.toLowerCase().includes(instr.toLowerCase())
       );
 
     return genreMatches && tagsMatches && instrumentsMatches;
@@ -78,7 +78,7 @@ const AudioList = () => {
   // Showing loader during fetching the audio list
   if (records.length === 0) {
     return (
-      <div>
+      <div className={styles.loader_box}>
         <Loader />
       </div>
     );
@@ -88,9 +88,11 @@ const AudioList = () => {
     const uniqueValuesSet = new Set();
 
     tags.forEach((str) => {
-      str.split(",").forEach((value) => {
-        uniqueValuesSet.add(value.trim());
-      });
+      if (typeof str === 'string') {
+        str.split(",").forEach((value) => {
+          uniqueValuesSet.add(value.trim());
+        });
+      }
     });
 
     return Array.from(uniqueValuesSet);

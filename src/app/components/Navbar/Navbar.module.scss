@@ -1,14 +1,30 @@
 .nav {
-    height: 100px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 15px;
-    position: fixed;
-    top: 0;
-    z-index: 400;
-    backdrop-filter: blur(10px);
+  height: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 15px;
+  position: fixed;
+  top: 0;
+  z-index: 400;
+  backdrop-filter: blur(10px);
+}
+
+.navigation_links {
+  display: inline-block;
+  position: absolute;
+  width: 500px;
+  right: 20px;
+  top: 48px;
+}
+
+.navigation_link {
+  margin-left: 10%;
+
+  &:hover {
+    color:rgba(221, 54, 118, 1);
+  }
 }
 
 .nav_wrapper {
@@ -42,12 +58,10 @@
   }
 }
 
-
 @media only screen and (max-width: 768px) {
-
   .nav {
     top: -25px;
-}
+  }
 
   .nav_wrapper {
     width: 98%;
