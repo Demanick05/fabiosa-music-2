@@ -12,18 +12,23 @@
 }
 
 .navigation_links {
-  display: inline-block;
-  position: absolute;
-  width: 500px;
-  right: 20px;
-  top: 48px;
+  display: flex;
+  width: 300px;
+  justify-content: end;
+}
+
+.nav_inner_wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .navigation_link {
   margin-left: 10%;
 
   &:hover {
-    color:rgba(221, 54, 118, 1);
+    color: rgba(221, 54, 118, 1);
   }
 }
 

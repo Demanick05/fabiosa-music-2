@@ -1,11 +1,8 @@
 "use client";
 import { useState, useEffect, useMemo } from "react";
-import Image from "next/image";
 import fetchRecords from "@/app/api/music/route";
 import styles from "./search.module.scss";
 import Loader from "../components/loader/Loader";
-import gridIcon from "../../../public/grid.png";
-import listIcon from "../../../public/list.png";
 
 const AudioList = () => {
   // Fetching records
@@ -40,21 +37,35 @@ const AudioList = () => {
   const instruments = [...new Set(records.map((record) => record.instruments))];
   const [selectedInstruments, setSelectedInstruments] = useState([]);
 
+  const composers = [...new Set(records.map((record) => record.сomposer))];
+  const [selectedComposers, setSelectedComposers] = useState([]);
+
   const matchesFilters = (item) => {
     const genreMatches =
       selectedGenres.length === 0 || selectedGenres.includes(item.music_genre);
     const tagsMatches =
       selectedCategories.length === 0 ||
-      selectedCategories.every((tag) =>
-        typeof item.tags === 'string' && item.tags.toLowerCase().includes(tag.toLowerCase())
+      selectedCategories.every(
+        (tag) =>
+          typeof item.tags === "string" &&
+          item.tags.toLowerCase().includes(tag.toLowerCase())
+      );
+    const composerMatches =
+      selectedComposers.length === 0 ||
+      selectedComposers.every(
+        (composer) =>
+          typeof item.composer === "string" &&
+          item.composer.toLowerCase().includes(composer.toLowerCase())
       );
     const instrumentsMatches =
       selectedInstruments.length === 0 ||
-      selectedInstruments.every((instr) =>
-        typeof item.instruments === 'string' && item.instruments.toLowerCase().includes(instr.toLowerCase())
+      selectedInstruments.every(
+        (instr) =>
+          typeof item.instruments === "string" &&
+          item.instruments.toLowerCase().includes(instr.toLowerCase())
       );
 
-    return genreMatches && tagsMatches && instrumentsMatches;
+    return genreMatches && tagsMatches && instrumentsMatches && composerMatches;
   };
 
   const filteredList = records.filter(matchesFilters);
@@ -88,7 +99,7 @@ const AudioList = () => {
     const uniqueValuesSet = new Set();
 
     tags.forEach((str) => {
-      if (typeof str === 'string') {
+      if (typeof str === "string") {
         str.split(",").forEach((value) => {
           uniqueValuesSet.add(value.trim());
         });
@@ -115,6 +126,14 @@ const AudioList = () => {
       prevSelectedInstruments.includes(instrument)
         ? prevSelectedInstruments.filter((c) => c !== instrument)
         : [...prevSelectedInstruments, instrument]
+    );
+  };
+
+  const handleComposerChange = (composer) => {
+    setSelectedComposers((prevSelectedComposers) =>
+      prevSelectedComposers.includes(composer)
+        ? prevSelectedComposers.filter((c) => c !== composer)
+        : [...prevSelectedComposers, composer]
     );
   };
 
@@ -277,8 +296,7 @@ const AudioList = () => {
             </button>
           </div>
         ) : (
-          <div>
-          </div>
+          <div></div>
         )}
       </div>
     </div>

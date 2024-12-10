@@ -139,7 +139,7 @@ const Database = () => {
       console.log("Fetched records from Airtable:", airtableTracks);
 
       // Fetch all tracks from Harmix
-      let offset = 10;
+      let offset = 1;
       const limit = 100;
       let harmixTracks = [];
       const harmixAPIKey = "KjeRtf2QZWXk2k6zRVArhWQLFusaKA";
@@ -226,15 +226,15 @@ const Database = () => {
             genres: record.music_genre
               ? record.music_genre.split(",").map((item) => item.trim())
               : [],
-            composers: record.composer
-              ? record.composer.split(",").map((item) => item.trim())
-              : [],
+            composers: [record.composer.trim()],
             platforms:
               typeof record.allowed_for_usage_platform === "string"
                 ? record.allowed_for_usage_platform
+                    .split(",")
+                    .map((item) => item.trim())
                 : Array.isArray(record.allowed_for_usage_platform)
-                ? record.allowed_for_usage_platform.join(", ")
-                : "",
+                ? record.allowed_for_usage_platform.map((item) => item.trim())
+                : [],
           };
 
           // Create FormData
@@ -317,8 +317,7 @@ const Database = () => {
       // Step 2: Iterate over each Airtable record
       for (const record of airtableRecords) {
         const trackName = record.base_music_name;
-        const airtableGenres = record.music_genre;
-        console.log(airtableGenres);
+        const airtableGenres = record.сomposer;
 
         // Skip if there is no composer data in Airtable
         if (!airtableGenres) {
@@ -339,7 +338,7 @@ const Database = () => {
             conditions: [
               {
                 field: "track_title",
-                operator: "begins",
+                operator: "contains",
                 value: trackName,
               },
             ],
@@ -373,74 +372,59 @@ const Database = () => {
             // Step 4: Process each track found in Harmix
             for (const track of tracks) {
               const harmixTrackName = track.metadata.track_title;
-              const harmixGenres = track.metadata.genres;
               const systemId = track.system_id;
 
-              // Check if the composers array is empty or undefined
-              if (!harmixGenres || harmixGenres.length === 0) {
-                console.log(
-                  `Updating composers for track "${harmixTrackName}" in Harmix.`
+              // Prepare composer data from Airtable
+              let genresArray = [];
+              if (typeof airtableGenres === "string") {
+                genresArray = airtableGenres
+                  .split(",")
+                  .map((genre) => genre.trim());
+              } else if (Array.isArray(airtableGenres)) {
+                genresArray = airtableGenres;
+              }
+
+              // Update the track in Harmix
+              const updateHeaders = new Headers();
+              updateHeaders.append("api_key", "KjeRtf2QZWXk2k6zRVArhWQLFusaKA");
+              updateHeaders.append("Content-Type", "application/json");
+
+              const updateBody = JSON.stringify({
+                primary_key: {
+                  system_id: systemId,
+                },
+                update_metadata: {
+                  composers: genresArray,
+                },
+              });
+
+              const updateRequestOptions = {
+                method: "PUT",
+                headers: updateHeaders,
+                body: updateBody,
+                redirect: "follow",
+              };
+
+              try {
+                const updateResponse = await fetch(
+                  "https://api.harmix.ai/tracks",
+                  updateRequestOptions
                 );
-
-                // Prepare composer data from Airtable
-                let genresArray = [];
-                if (typeof airtableGenres === "string") {
-                  genresArray = airtableGenres
-                    .split(",")
-                    .map((genre) => genre.trim());
-                } else if (Array.isArray(airtableGenres)) {
-                  genresArray = airtableGenres;
-                }
-
-                // Update the track in Harmix
-                const updateHeaders = new Headers();
-                updateHeaders.append(
-                  "api_key",
-                  "KjeRtf2QZWXk2k6zRVArhWQLFusaKA"
-                );
-                updateHeaders.append("Content-Type", "application/json");
-
-                const updateBody = JSON.stringify({
-                  primary_key: {
-                    system_id: systemId,
-                  },
-                  update_metadata: {
-                    genres: genresArray,
-                  },
-                });
-
-                const updateRequestOptions = {
-                  method: "PUT",
-                  headers: updateHeaders,
-                  body: updateBody,
-                  redirect: "follow",
-                };
-
-                try {
-                  const updateResponse = await fetch(
-                    "https://api.harmix.ai/tracks",
-                    updateRequestOptions
-                  );
-                  if (!updateResponse.ok) {
-                    console.error(
-                      `Error updating genres for "${harmixTrackName}": ${updateResponse.statusText}`
-                    );
-                    continue;
-                  }
-                  const updateResult = await updateResponse.json();
-                  console.log(
-                    `Successfully updated genres for "${harmixTrackName}".`,
-                    updateResult
-                  );
-                } catch (updateError) {
+                if (!updateResponse.ok) {
                   console.error(
-                    `Error updating track "${harmixTrackName}":`,
-                    updateError
+                    `Error updating composers for "${harmixTrackName}": ${updateResponse.statusText}`
                   );
+                  continue;
                 }
-              } else {
+                const updateResult = await updateResponse.json();
                 console.log(
-                  `Track "${harmixTrackName}" already has genres in Harmix. Skipping update.`
+                  `Successfully updated composers for "${harmixTrackName}".`,
+                  updateResult
+                );
+              } catch (updateError) {
+                console.error(
+                  `Error updating track "${harmixTrackName}":`,
+                  updateError
                 );
               }
             }
@@ -455,7 +439,7 @@ const Database = () => {
         }
       }
 
-      console.log("Genres update process completed.");
+      console.log("Composers update process completed.");
     } catch (error) {
       console.error("An error occurred during the update process:", error);
     }
